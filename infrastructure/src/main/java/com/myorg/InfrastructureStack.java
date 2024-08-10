@@ -1,18 +1,19 @@
 package com.myorg;
 
 import software.amazon.awscdk.Duration;
-import software.amazon.awscdk.services.apigateway.Stage;
 import software.constructs.Construct;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.apigateway.ResourceOptions;
+import software.amazon.awscdk.services.apigateway.LambdaIntegration;
+import software.amazon.awscdk.services.apigateway.EndpointType;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.Resource;
-import software.amazon.awscdk.services.apigateway.LambdaIntegration;
-import software.amazon.awscdk.services.apigateway.ProxyResourceOptions;
-import software.amazon.awscdk.services.apigateway.LambdaIntegrationOptions;
+
+import java.util.List;
 // import software.amazon.awscdk.Duration;
 // import software.amazon.awscdk.services.sqs.Queue;
 
@@ -38,14 +39,12 @@ public class InfrastructureStack extends Stack {
         LambdaRestApi api = LambdaRestApi.Builder.create(this, "RestLamdaFuncAPI")
                 .handler(lambdaHandler)
                 .proxy(false)
-                .integrationOptions(LambdaIntegrationOptions.builder()
-                        .allowTestInvoke(true)
-                        .timeout(Duration.seconds(29))
-                        .build()
-                )
+                .endpointTypes(List.of(EndpointType.EDGE))
                 .build();
         // /hello Endpoint
-        Resource helloResource = api.getRoot().addResource("hello");
+        Resource helloResource = api.getRoot().addResource("hello", ResourceOptions.builder()
+                .defaultIntegration(new LambdaIntegration(lambdaHandler))
+                .build());
         helloResource.addMethod("GET");
     }
 }

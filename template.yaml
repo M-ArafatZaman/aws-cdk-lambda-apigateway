@@ -23,7 +23,7 @@ Resources:
       Code:
         S3Bucket:
           Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
-        S3Key: 3a134e65c02dde21788d758601d851bd7293792b46808b3daa13f61c56f16ebe.jar
+        S3Key: 686a36b6b2fbea79ce6fb3e261436cc6c7b80dd4b1b7dc63ee12735fb67426a2.jar
       FunctionName: RestLambdaFunction
       Handler: org.awsarafat.Handler
       Role:
@@ -36,16 +36,19 @@ Resources:
       - RestLambdaFunctionServiceRole4EAFF98F
     Metadata:
       aws:cdk:path: InfrastructureStack/RestLambdaFunction/Resource
-      aws:asset:path: asset.3a134e65c02dde21788d758601d851bd7293792b46808b3daa13f61c56f16ebe.jar
+      aws:asset:path: asset.686a36b6b2fbea79ce6fb3e261436cc6c7b80dd4b1b7dc63ee12735fb67426a2.jar
       aws:asset:is-bundled: false
       aws:asset:property: Code
   RestLamdaFuncAPI54BA2297:
     Type: AWS::ApiGateway::RestApi
     Properties:
+      EndpointConfiguration:
+        Types:
+          - EDGE
       Name: RestLamdaFuncAPI
     Metadata:
       aws:cdk:path: InfrastructureStack/RestLamdaFuncAPI/Resource
-  RestLamdaFuncAPIDeployment7A7A92BA1c1333b52ffe577ce3496e65d23dcd9f:
+  RestLamdaFuncAPIDeployment7A7A92BAc320f2f18f73e64e6ff80b2f90e5cf42:
     Type: AWS::ApiGateway::Deployment
     Properties:
       Description: Automatically created by the RestApi construct
@@ -60,7 +63,7 @@ Resources:
     Type: AWS::ApiGateway::Stage
     Properties:
       DeploymentId:
-        Ref: RestLamdaFuncAPIDeployment7A7A92BA1c1333b52ffe577ce3496e65d23dcd9f
+        Ref: RestLamdaFuncAPIDeployment7A7A92BAc320f2f18f73e64e6ff80b2f90e5cf42
       RestApiId:
         Ref: RestLamdaFuncAPI54BA2297
       StageName: prod
