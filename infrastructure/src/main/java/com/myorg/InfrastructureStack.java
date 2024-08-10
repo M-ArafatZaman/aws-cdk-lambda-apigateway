@@ -10,6 +10,9 @@ import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.Resource;
+import software.amazon.awscdk.services.apigateway.LambdaIntegration;
+import software.amazon.awscdk.services.apigateway.ProxyResourceOptions;
+import software.amazon.awscdk.services.apigateway.LambdaIntegrationOptions;
 // import software.amazon.awscdk.Duration;
 // import software.amazon.awscdk.services.sqs.Queue;
 
@@ -35,6 +38,11 @@ public class InfrastructureStack extends Stack {
         LambdaRestApi api = LambdaRestApi.Builder.create(this, "RestLamdaFuncAPI")
                 .handler(lambdaHandler)
                 .proxy(false)
+                .integrationOptions(LambdaIntegrationOptions.builder()
+                        .allowTestInvoke(true)
+                        .timeout(Duration.seconds(29))
+                        .build()
+                )
                 .build();
         // /hello Endpoint
         Resource helloResource = api.getRoot().addResource("hello");
